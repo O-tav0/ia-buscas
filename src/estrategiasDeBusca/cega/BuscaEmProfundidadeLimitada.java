@@ -65,9 +65,11 @@ public class BuscaEmProfundidadeLimitada extends BuscaEmProfundidade {
 	public void buscar() {
 		Estado<?> eCorrente = eInicial;
 		while ((eCorrente != null) && (!eCorrente.equals(eObjetivo))) {
-			if (eCorrente.getNivel() < limite)
-				for (Estado<?> estado : (List<Estado<?>>) eCorrente.getSucessores())
+			if (eCorrente.getNivel() < limite) {
+				for (Estado<?> estado : (List<Estado<?>>) eCorrente.getSucessores()) {
 					eAbertos.push(estado);
+				}
+			}
 			eCorrente = eAbertos.pop();
 		}
 		// Se o laço foi encerrado por um estado válido ...
@@ -81,5 +83,4 @@ public class BuscaEmProfundidadeLimitada extends BuscaEmProfundidade {
 			Collections.reverse(caminho);
 		}
 	}
-	
 }
