@@ -15,8 +15,12 @@ public class Main {
 		char[] cfgIni = {' ','2','3','1','4','6','7','5','8'};
 		//char[] cfgIni = {'2','4','3','7','1','6','5',' ','8'};
 		//char[] cfgIni = {'2','3',' ','7','4','1','5','8','6'};
+		char[] cfgIni2 = {'2','3',' ','7','4','1','5','8','6'};
+
 		//char[] cfgIni = {'7','2','3','4',' ','1','5','8','6'}; // OutOfMemory
 		char[] cgFim = {'2', '3', ' ', '7', '4', '1', '5','8','6'};
+		char[] cgFim2 = {'7','2','3','4',' ','1','5','8','6'};
+
 		Puzzle8 puzzleInicial = new Puzzle8();
 		puzzleInicial.setEstado(cfgIni);
 		puzzleInicial.setCusto(0);
@@ -26,6 +30,8 @@ public class Main {
 		puzzleFinal.setEstado(cgFim);
 		puzzleFinal.setCusto(0);
 		puzzleFinal.setAvaliacao(0);
+
+
 
 		System.out.println("Qual método de busca deseja usar ?");
 
@@ -39,7 +45,7 @@ public class Main {
 
 		switch(escolhaMetodo) {
 			case 1:
-				System.out.println("Qual vai ser o limite ?");
+				System.out.println("Qual vai ser o limite da primeira execução ?");
 				BuscaEmProfundidadeLimitada buscaLimitada = new BuscaEmProfundidadeLimitada();
 
 				buscaLimitada.setInicio(puzzleInicial);
@@ -49,9 +55,21 @@ public class Main {
 				scanner.nextLine();
 
 				mostrarCaminho(buscaLimitada.getCaminhoSolucao());
+				System.out.println("Fim da primeira execução");
+
+				System.out.println("Qual vai ser o limite da segunda execução ?");
+
+				puzzleInicial.setEstado(cfgIni2);
+				puzzleFinal.setEstado(cgFim2);
+
+				buscaLimitada.setLimite(scanner.nextInt());
+				buscaLimitada.buscar();
+				scanner.nextLine();
+
+				mostrarCaminho(buscaLimitada.getCaminhoSolucao());
+				System.out.println("Fim da segunda execução");
 
 				break;
-
 			case 2:
 				BuscaEmProfundidadeLimitada buscaLimitadaDinamica = new BuscaEmProfundidadeLimitada();
 
@@ -73,6 +91,25 @@ public class Main {
 				}
 
 				mostrarCaminho(buscaLimitadaDinamica.getCaminhoSolucao());
+				System.out.println("Fim da primeira execução");
+
+				puzzleInicial.setEstado(cfgIni2);
+				puzzleFinal.setEstado(cgFim2);
+				buscaLimitadaDinamica.setLimite(0);
+				caminhoDaSolucao = null;
+
+				while(caminhoDaSolucao == null) {
+					try {
+						buscaLimitadaDinamica.buscar();
+						caminhoDaSolucao = buscaLimitadaDinamica.getCaminhoSolucao();
+					} catch (Exception e) {
+						System.out.println("O limite mínimo necessário não é: " + buscaLimitadaDinamica.getLimite());
+					}
+					buscaLimitadaDinamica.setLimite(buscaLimitadaDinamica.getLimite() + 1);
+				}
+
+				mostrarCaminho(buscaLimitadaDinamica.getCaminhoSolucao());
+				System.out.println("Fim da segunda execução");
 
 				break;
 
@@ -84,6 +121,15 @@ public class Main {
 				buscaAstar.buscar();
 
 				mostrarCaminho(buscaAstar.getCaminhoSolucao());
+				System.out.println("Fim da primeira execução");
+
+				puzzleInicial.setEstado(cfgIni2);
+				puzzleFinal.setEstado(cgFim2);
+
+				buscaAstar.buscar();
+
+				mostrarCaminho(buscaAstar.getCaminhoSolucao());
+				System.out.println("Fim da segunda execução");
 
 				break;
 
@@ -95,6 +141,17 @@ public class Main {
 				bestFirst.buscar();
 
 				mostrarCaminho(bestFirst.getCaminhoSolucao());
+				System.out.println("Fim da primeira execução");
+
+
+				puzzleInicial.setEstado(cfgIni2);
+				puzzleFinal.setEstado(cgFim2);
+
+				bestFirst.buscar();
+
+				mostrarCaminho(bestFirst.getCaminhoSolucao());
+				System.out.println("Fim da segunda execução");
+
 		}
 		System.exit(0);
 	}
